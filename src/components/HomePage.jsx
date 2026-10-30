@@ -50,8 +50,16 @@ export default function HomePage({ answeredCount, accuracy, progress, onStart, o
       <div className="semester-promo-copy">
         <span className="semester-promo-kicker">ANOTHER STUDENT PROJECT</span>
         <h3>Semester OS</h3>
-        <p>Organize your schedule, manual attendance, notes, assignments, and study progress in one local-first workspace.</p>
-        <span className="semester-promo-note">No account or cloud sync · Offline-capable · Your academic data stays in your browser</span>
+        <p>Keep your schedule, manual attendance, notes, assignments, and progress in one place.</p>
+        <span className="semester-promo-note">Local-first · No account or cloud sync · Offline-capable</span>
+      </div>
+      <div className="semester-promo-previews" aria-label="Semester OS screenshots">
+        <a href="https://semester-os-4y6.pages.dev" target="_blank" rel="noopener noreferrer" aria-label="Open Semester OS Today dashboard demo">
+          <img src={`${import.meta.env.BASE_URL}semester-os-today.png`} alt="Semester OS Today dashboard with labelled demo data" loading="lazy" />
+        </a>
+        <a href="https://semester-os-4y6.pages.dev" target="_blank" rel="noopener noreferrer" aria-label="Open Semester OS weekly schedule demo">
+          <img src={`${import.meta.env.BASE_URL}semester-os-schedule.png`} alt="Semester OS weekly schedule with sample classes" loading="lazy" />
+        </a>
       </div>
       <a className="button button-outline button-small semester-promo-link" href="https://semester-os-4y6.pages.dev" target="_blank" rel="noopener noreferrer">Try the live beta <Icon name="arrow" size={14} /></a>
     </aside>

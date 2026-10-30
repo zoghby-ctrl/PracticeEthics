@@ -139,13 +139,16 @@ button:disabled { cursor: not-allowed; opacity: .5; }
 .note-icon { width: 30px; height: 30px; display: grid; flex: 0 0 auto; place-items: center; border-radius: 10px; color: #52765c; background: #e2ecda; }
 .home-note p { flex: 1; margin: 0; color: #66786b; font-size: 14.4px; line-height: 1.5; }
 .note-tag { color: #81947f; font-size: 9.6px; font-weight: 700; letter-spacing: .12em; }
-.semester-promo { display: grid; grid-template-columns: 42px minmax(0,1fr) auto; align-items: center; gap: 13px; margin-top: 14px; padding: 16px 18px; border: 1px solid #dce5da; border-radius: 15px; background: linear-gradient(115deg, #fafbf8, #f0f5ed); }
+.semester-promo { display: grid; grid-template-columns: 42px minmax(260px,1fr) minmax(210px,.8fr) auto; align-items: center; gap: 13px; margin-top: 14px; padding: 16px 18px; border: 1px solid #dce5da; border-radius: 15px; background: linear-gradient(115deg, #fafbf8, #f0f5ed); }
 .semester-promo-mark { width: 38px; height: 38px; display: grid; place-items: center; border: 1px solid #d6e2d3; border-radius: 12px; color: #406c52; background: #eaf1e7; font: 700 18px/1 'Manrope', sans-serif; }
 .semester-promo-copy { min-width: 0; }
 .semester-promo-kicker { color: #829183; font-size: 9.6px; font-weight: 700; letter-spacing: .13em; }
 .semester-promo h3 { margin: 3px 0 3px; color: #2f4939; font: 700 17px/1.2 'Manrope', sans-serif; }
 .semester-promo p { margin: 0; color: #65766b; font-size: 13.2px; line-height: 1.5; }
 .semester-promo-note { display: block; margin-top: 5px; color: #839187; font-size: 10.8px; line-height: 1.45; }
+.semester-promo-previews { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 7px; }
+.semester-promo-previews a { display: block; overflow: hidden; aspect-ratio: 16/10; border: 1px solid #dce4da; border-radius: 9px; background: #e9eee7; }
+.semester-promo-previews img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top left; }
 .semester-promo-link { white-space: nowrap; }
 
 /* Page headings and source browser */
@@ -451,6 +454,7 @@ button:disabled { cursor: not-allowed; opacity: .5; }
   .home-note { align-items: flex-start; }
   .semester-promo { grid-template-columns: 38px minmax(0,1fr); align-items: start; gap: 9px 11px; padding: 14px; }
   .semester-promo-mark { width: 34px; height: 34px; }
+  .semester-promo-previews { grid-column: 2; width: min(100%, 300px); }
   .semester-promo-link { grid-column: 2; justify-self: start; }
   .note-tag { display: none; }
   .page-intro { align-items: flex-start; flex-direction: column; gap: 13px; margin-bottom: 20px; }

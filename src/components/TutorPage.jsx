@@ -5,6 +5,7 @@ import { CitationList, Icon, PageIntro } from './ui.jsx';
 const stopWords = new Set(['about','after','also','and','are','can','could','does','from','have','help','into','what','when','where','which','with','would','your','this','that','the','why','how','explain','please','tell','give','some','more','than','then','them','they','their','was','were','will','should','course','lecture','pdf','notes']);
 const aiEndpointEnabled = import.meta.env.VITE_AI_ENDPOINT_ENABLED === 'true';
 const aiApiBaseUrl = (import.meta.env.VITE_AI_API_BASE_URL || '').replace(/\/$/, '');
+const isModelQuestion = (query) => /\b(?:what|which) (?:ai )?model (?:are|is) (?:you|the (?:ai )?tutor) (?:using|running|powered by)\b/i.test(query);
 
 function findRelevantSummaries(query, limit = 3) {
   const words = [...new Set(query.toLowerCase().match(/[a-z0-9-]{3,}/g) || [])].filter((word) => !stopWords.has(word));
@@ -17,6 +18,10 @@ function findRelevantSummaries(query, limit = 3) {
 }
 
 function localTutorAnswer(query) {
+  if (isModelQuestion(query)) return {
+    content: 'This device is using the local course guide, which is not connected to an AI model. The online AI Tutor needs its server endpoint to be configured.',
+    citations: [],
+  };
   const relevant = findRelevantSummaries(query, 2);
   if (!relevant.length) return {
     content: 'I can’t find enough support for that in the course summaries, so I won’t guess. Try a named topic such as autonomy, consent, fairness, privacy, copyright, accountability, or deepfakes.',

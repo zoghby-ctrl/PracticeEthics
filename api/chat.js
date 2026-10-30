@@ -37,6 +37,10 @@ export default async function handler(req, res) {
   const body = req.body && typeof req.body === 'object' ? req.body : {};
   const message = typeof body.message === 'string' ? body.message.trim().slice(0, 1800) : '';
   if (!message) return sendJson(res, 400, { error: 'A question is required.' });
+  if (/\b(?:what|which) (?:ai )?model (?:are|is) (?:you|the (?:ai )?tutor) (?:using|running|powered by)\b/i.test(message)) {
+    const model = process.env.OPENAI_MODEL || 'gpt-6-luna';
+    return sendJson(res, 200, { answer: `This AI Tutor is configured to use OpenAI’s ${model} model. That’s server configuration, not information from the lecture PDFs.`, citations: [] });
+  }
 
   const relevant = retrieve(message, 3);
   if (!relevant.length) {

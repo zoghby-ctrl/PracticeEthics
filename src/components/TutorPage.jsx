@@ -1,11 +1,19 @@
 import { useEffect, useRef } from 'react';
-import { summaries } from '../data/course-content.js';
+import { modules, summaries } from '../data/course-content.js';
 import { CitationList, Icon, PageIntro } from './ui.jsx';
 
 const stopWords = new Set(['about','after','also','and','are','can','could','does','from','have','help','into','what','when','where','which','with','would','your','this','that','the','why','how','explain','please','tell','give','some','more','than','then','them','they','their','was','were','will','should','course','lecture','pdf','notes']);
 const aiEndpointEnabled = import.meta.env.VITE_AI_ENDPOINT_ENABLED === 'true';
 const aiApiBaseUrl = (import.meta.env.VITE_AI_API_BASE_URL || '').replace(/\/$/, '');
 const isModelQuestion = (query) => /\b(?:what|which) (?:ai )?model (?:are|is) (?:you|the (?:ai )?tutor) (?:using|running|powered by)\b/i.test(query);
+
+function requestedLecture(query) {
+  const words = { one: 1, two: 2, three: 3, four: 4, five: 5, first: 1, second: 2, third: 3, fourth: 4, fifth: 5 };
+  const match = query.match(/\b(?:lecture|module|lec)\s*(?:number\s*)?(1|2|3|4|5|one|two|three|four|five|first|second|third|fourth|fifth)\b/i);
+  if (!match) return null;
+  const value = match[1].toLowerCase();
+  return Number(value) || words[value] || null;
+}
 
 function findRelevantSummaries(query, limit = 3) {
   const words = [...new Set(query.toLowerCase().match(/[a-z0-9-]{3,}/g) || [])].filter((word) => !stopWords.has(word));
@@ -22,6 +30,15 @@ function localTutorAnswer(query) {
     content: 'This device is using the local course guide, which is not connected to an AI model. The online AI Tutor needs its server endpoint to be configured.',
     citations: [],
   };
+  const lectureNumber = requestedLecture(query);
+  if (lectureNumber) {
+    const module = modules.find((item) => Number(item.number) === lectureNumber);
+    const topics = summaries.filter((item) => item.moduleId === `lecture-${lectureNumber}`);
+    if (module && topics.length) return {
+      content: `Lecture ${lectureNumber}: ${module.title}\n\n${topics.map((item) => `${item.title}: ${item.summary}`).join('\n\n')}\n\nThis overview is from the lecture summaries. Ask about any topic for a closer explanation.`,
+      citations: topics.flatMap((item) => item.sources).slice(0, 6),
+    };
+  }
   const relevant = findRelevantSummaries(query, 2);
   if (!relevant.length) return {
     content: 'I can’t find enough support for that in the course summaries, so I won’t guess. Try a named topic such as autonomy, consent, fairness, privacy, copyright, accountability, or deepfakes.',
@@ -78,7 +95,7 @@ export default function TutorPage({ messages, setMessages, input, setInput, isLo
   };
 
   return <div className="page-view tutor-view">
-    <PageIntro eyebrow="OPTIONAL STUDY COMPANION" title="Ask the course a question." description="Get a concept explained, find a source page, or reason through a dilemma. The tutor is guided by the five lecture PDFs." action={<span className={`tutor-mode-badge ${mode === 'ai' ? 'connected' : ''}`}><span className="status-dot" />{mode === 'ai' ? 'AI connected' : 'Local fallback ready'}</span>} />
+    <PageIntro eyebrow="OPTIONAL STUDY COMPANION" title="Ask the course a question." description="Get a concept explained, find a source page, or reason through a dilemma. Answers start from the five lecture PDFs, with any extra background clearly labeled." action={<span className={`tutor-mode-badge ${mode === 'ai' ? 'connected' : ''}`}><span className="status-dot" />{mode === 'ai' ? 'AI connected' : 'Local fallback ready'}</span>} />
     {error && <div className="tutor-connection-note"><Icon name="info" size={16} />{error}</div>}
     <div className="tutor-layout">
       <section className="chat-panel" aria-label="AI Tutor conversation">
@@ -101,9 +118,9 @@ export default function TutorPage({ messages, setMessages, input, setInput, isLo
         <div className="chat-compose-foot"><span>Enter to send · Shift + Enter for a new line</span><span>Check important details against the cited PDF.</span></div>
       </section>
       <aside className="tutor-aside">
-        <div className="tutor-aside-card"><span className="tutor-aside-icon"><Icon name="file" size={18} /></span><div className="eyebrow">SOURCE-FIRST</div><h3>Five lecture PDFs</h3><p>Answers should point back to the material. If the course notes don’t support a claim, the tutor should say so.</p></div>
+        <div className="tutor-aside-card"><span className="tutor-aside-icon"><Icon name="file" size={18} /></span><div className="eyebrow">SOURCE-FIRST</div><h3>Five lecture PDFs</h3><p>The course material is the anchor. When extra context helps, the tutor labels it as supplemental background.</p></div>
         <div className="tutor-aside-card tutor-prompt-card"><div className="eyebrow">TRY ASKING</div><div className="suggestion-list">{prompts.map((prompt) => <button key={prompt} onClick={() => send(prompt)} disabled={isLoading}>{prompt}<Icon name="arrow" size={14} /></button>)}</div></div>
-        <div className="tutor-fallback"><Icon name="info" size={15} /><p>If no API key is configured, this page searches the local summaries and shows matching citations. Core study features never depend on the AI service.</p></div>
+        <div className="tutor-fallback"><Icon name="info" size={15} /><p>AI is used only when you send a tutor question. Replies are kept concise; practice, summaries, and progress do not use API credit. Without the server setup, the tutor searches local summaries instead.</p></div>
       </aside>
     </div>
   </div>;

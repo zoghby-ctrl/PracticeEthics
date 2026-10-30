@@ -51,7 +51,7 @@ VITE_AI_API_BASE_URL=https://your-vercel-project.vercel.app
 
 The Vercel URL should be the origin only, without a trailing slash. Push a commit or rerun the Pages workflow so it rebuilds with these variables. Keep `OPENAI_API_KEY` only in Vercel's server-side environment; never add it to GitHub, a `VITE_` variable, or browser code. Without this separate Vercel setup, the GitHub Pages site still works and the tutor uses its local course-guide mode.
 
-The tutor receives relevant topic summaries, not quiz answer keys. It is instructed to cite the supplied PDF pages, say when the course material does not support an answer, and coach students through quiz reasoning without revealing the answer before submission.
+The tutor receives only relevant topic summaries, or the summaries from a requested lecture. It can also add clearly labeled general background when that helps explain an idea. It does not receive quiz answer keys and is instructed to coach students through quiz reasoning without revealing an answer before submission. Replies are capped and use low reasoning effort to keep each request concise.
 
 ## Content updates
 

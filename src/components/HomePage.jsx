@@ -45,5 +45,15 @@ export default function HomePage({ answeredCount, accuracy, progress, onStart, o
       })}
     </section>
     <div className="home-note"><span className="note-icon"><Icon name="pin" size={17} /></span><p>Every question and topic summary points back to a lecture PDF page, so you can follow the reasoning to its source.</p><span className="note-tag">PDF-GROUNDED</span></div>
+    <aside className="semester-promo" aria-label="Semester OS student planner">
+      <span className="semester-promo-mark" aria-hidden="true">S</span>
+      <div className="semester-promo-copy">
+        <span className="semester-promo-kicker">ANOTHER STUDENT PROJECT</span>
+        <h3>Semester OS</h3>
+        <p>Organize your schedule, manual attendance, notes, assignments, and study progress in one local-first workspace.</p>
+        <span className="semester-promo-note">No account or cloud sync · Offline-capable · Your academic data stays in your browser</span>
+      </div>
+      <a className="button button-outline button-small semester-promo-link" href="https://semester-os-4y6.pages.dev" target="_blank" rel="noopener noreferrer">Try the live beta <Icon name="arrow" size={14} /></a>
+    </aside>
   </div>;
 }
